@@ -1,81 +1,66 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import { getVideo } from "../lib/twitter.js";
+
+const videos = await Promise.all(
+  [
+		"https://twitter.com/i/status/1637188679050358784",
+		"https://twitter.com/i/status/1637182107620372480",
+		"https://twitter.com/i/status/1637191509744254978",
+
+		"https://twitter.com/i/status/1636879114157150212",
+		"https://twitter.com/i/status/1637209057458044931",
+		"https://twitter.com/i/status/1637755836738031617",
+
+		"https://twitter.com/i/status/1636123279051071489",
+    "https://twitter.com/i/status/1637523312648548353",
+    "https://twitter.com/realmarcel1/status/1637576398792531971",
+  ].map((x) => getVideo(x))
+);
+console.log("videos", videos);
 ---
 
 <Layout title="Welcome to Astro.">
-	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
-		</ul>
-	</main>
+	<header><h1>Here what's going on in France:</h1></header>
+  <main>
+    {
+      videos.map((x) => (
+        <video autoplay playsinline muted controls loop>
+          <source src={x} type="video/mp4" />
+        </video>
+      ))
+    }
+  </main>
+	<footer>
+		<p>Toutes ces images viennent de Twitter, merci à tous les journalistes indépendants.</p>
+	</footer>
 </Layout>
 
 <style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-		max-width: 60ch;
-	}
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
+	p {
 		margin: 0;
 	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
+	header {
 		padding: 1rem;
-		border-radius: 0.4rem;
+		text-align: center;
 	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
+	footer {
+		padding: 1rem;
+		font-size: 0.8rem;
 	}
-	.instructions strong {
-		color: rgb(var(--accent));
+	video {
+		width: 100%;
 	}
-	.link-card-grid {
+
+	main {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2px;
+		padding: 2px;
+	}
+
+	main > video {
+		border-radius: 2px;
 	}
 </style>
